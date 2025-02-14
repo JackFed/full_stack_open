@@ -1,6 +1,10 @@
 const StatisticLine = ( {option, amount} ) => {
     return (
-        <p>{option} {amount}</p>
+        <tr>
+            <td>{option}</td>
+            <td>{amount}</td>
+        </tr>
+        
     )
 }
 
