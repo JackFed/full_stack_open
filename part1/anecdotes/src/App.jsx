@@ -21,7 +21,7 @@ const App = () => {
     const randNum = Math.floor(Math.random() * anecdotes.length)
     setSelected(randNum)
   }
-
+  
   const vote = () => {
     const copy = [...votes]
     copy[selected] += 1
