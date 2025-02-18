@@ -52,12 +52,18 @@ const App = () => {
     setFilter(event.target.value)
   }
 
-  const handleDelete = (id) => {
-    personService
-        .deletePerson(id)
+  const handleDelete = (person) => {
+    const confirmDel = confirm(`Delete ${person.name}?`)
+    if (confirmDel) {
+      personService
+        .deletePerson(person.id)
         .then(() => {
-          setPersons(persons.filter(person => person.id !== id))
+          setPersons(persons.filter(p => p.id !== person.id))
         })
+    } else {
+      console.log(`${person.name} not deleted`)
+    }
+
     
   }
 
