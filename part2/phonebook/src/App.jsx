@@ -27,10 +27,16 @@ const App = () => {
     if (isDuplicate) {
       alert(`${newName} is already added to the phonebook`)
     } else {
-      setPersons(persons.concat({
+      const newPerson = {
         name: newName,
         number: newNum
-      }))
+      }
+      axios
+        .post('http://localhost:3001/persons', newPerson)
+        .then(() => {
+          setPersons(persons.concat(newPerson))
+        })
+      
     }
     setNewName('')
     setNewNum('')
