@@ -18,12 +18,12 @@
     {
       "id": "4",
       "content": "asdfjdsalkf",
-      "important": false
+      "important": true
     },
     {
       "id": "5",
       "content": "asdf asdfsdaf",
-      "important": true
+      "important": false
     }
   ]
 }
