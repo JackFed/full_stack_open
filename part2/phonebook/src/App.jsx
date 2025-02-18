@@ -23,7 +23,17 @@ const App = () => {
     event.preventDefault()
     const isDuplicate = persons.some(person => person.name === newName)
     if (isDuplicate) {
-      alert(`${newName} is already added to the phonebook`)
+      const changeNum = confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)
+      if (changeNum) {
+        const personToChange = persons.filter(person => person.name === newName)[0] // Filter keeps person in array
+        const changedP = { ...personToChange, number: newNum }
+        console.log(personToChange, changedP)
+        personService
+          .updateNumber(changedP.id, changedP)
+          .then(() => {
+            setPersons(persons.map(p => p.id === changedP.id ? changedP : p))
+          })
+      }
     } else {
       const newPerson = {
         name: newName,
