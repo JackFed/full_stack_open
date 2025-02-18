@@ -8,12 +8,10 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
 
   useEffect(() => {
-    console.log('effect')
     noteService
       .getAll()
-      .then(response => {
-        console.log('promise fulfilled')
-        setNotes(response.data)
+      .then(initialNotes => {
+        setNotes(initialNotes)
       })
   }, [])
 
@@ -27,9 +25,8 @@ const App = () => {
 
     noteService
       .create(noteObject)
-      .then(response => {
-        console.log(response)
-        setNotes(notes.concat(noteObject))
+      .then(returnedNote => {
+        setNotes(notes.concat(returnedNote))
         setNewNote('')
       })
   }
@@ -46,8 +43,14 @@ const App = () => {
 
     noteService
       .update(id, changedNote)
-      .then(response => {
-        setNotes(notes.map(n => n.id === id ? response.data : n))
+      .then(returnedNote => {
+        setNotes(notes.map(n => n.id === id ? returnedNote : n))
+      })
+      .catch(error => {
+        alert(
+          `the note '${note.content}' was already deleted from server`
+        )
+        setNotes(notes.filter(n => n.id !== id))
       })
   }
 
