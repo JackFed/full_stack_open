@@ -4,12 +4,14 @@ import Form from './components/Form'
 import Input from './components/Input'
 import DisplayPeople from './components/DisplayPeople'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNum, setNewNum] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
     personService
@@ -32,6 +34,10 @@ const App = () => {
           .updateNumber(changedP.id, changedP)
           .then(() => {
             setPersons(persons.map(p => p.id === changedP.id ? changedP : p))
+            updateMessage(`The number of ${newName} was changed`)
+          })
+          .catch(() => {
+            updateMessage(`The information of ${newName} has already been removed from the server`)
           })
       }
     } else {
@@ -43,8 +49,8 @@ const App = () => {
         .create(newPerson)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          updateMessage(`${newName} was added`)
         })
-      
     }
     setNewName('')
     setNewNum('')
@@ -69,12 +75,18 @@ const App = () => {
         .deletePerson(person.id)
         .then(() => {
           setPersons(persons.filter(p => p.id !== person.id))
+          updateMessage(`${person.name}' was deleted`)
         })
     } else {
-      console.log(`${person.name} not deleted`)
+      updateMessage(`${person.name}' was not deleted`)
     }
+  }
 
-    
+  const updateMessage = (message) => {
+    setMessage(message)
+    setTimeout(() => {
+      setMessage(null)
+    }, 4000)
   }
 
   const filteredPersons = persons.filter( (person) => {
@@ -84,6 +96,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Input description="Filter by name:" handleChange={handleFilterChange} value={filter} />
       <Form newName={newName} newNum={newNum} handleAddName={handleAddName} handleNameChange={handleNameChange} handleNumChange={handleNumChange} />
       <DisplayPeople filter={filter} persons={filteredPersons} deletePerson={handleDelete}/>
