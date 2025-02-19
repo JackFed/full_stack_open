@@ -1,4 +1,8 @@
-const CountryInfo = ({ country }) => {
+const CountryInfo = ({ country, getWeather }) => {
+
+    const weather = getWeather(country.capital)
+
+
     return (
         <div key={country.name.common}>
           <h1>{country.name.common}</h1>
@@ -11,6 +15,12 @@ const CountryInfo = ({ country }) => {
             )}
           </ul>
           <img src={country.flags["png"]} alt="Flag" />
+          <div>
+            <h1>Weather in {country.capital}</h1>
+            <p>Temperature: degrees Fahrenheit</p>
+            <img src="#" alt="" />
+            <p>Wind m/s</p>
+          </div>
         </div>
     )
 }

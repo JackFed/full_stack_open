@@ -7,6 +7,8 @@ function App() {
   const [shownCountry, setShownCountry] = useState(null)
   const [selectedCountries, setSelectedCountries] = useState([])
 
+  const weatherUrl =`https://api.openweathermap.org/data/2.5/weather?q=`
+
   // Intial API call on first load
   useEffect(() => {
     console.log('effect run')
@@ -33,7 +35,29 @@ function App() {
     setSelectedCountries(selected)
   }
 
-
+  const getWeather = (capital) => {
+    axios
+      .get(`${weatherUrl}${capital}&appid=${import.meta.env.VITE_API_KEY}`)
+      .then(response => {
+        console.log(response.data)
+        return response.data
+      })
+      .then(weather => {
+        console.log('Weather', weather)
+        const tempF = ((weather.main.temp - 273.15) * 9 / 5 + 32 ).toFixed(2)
+        const iconURL = `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`
+        const weatherMetrics = {
+          temp: tempF,
+          icon: iconURL,
+          windSpeed: weather.wind.speed
+        }
+        console.log(weatherMetrics)
+        return weatherMetrics
+      })
+      .catch(error => {
+        console.log("Error fetching data:", error);
+      });
+  }
 
   
 
@@ -55,7 +79,7 @@ function App() {
       </ul>
       {shownCountry && <CountryInfo country={shownCountry} /> }
       {selectedCountries.length === 1 && 
-        <CountryInfo country={selectedCountries[0]} />        
+        <CountryInfo country={selectedCountries[0]} getWeather={getWeather} />        
       }
     </>
   )
