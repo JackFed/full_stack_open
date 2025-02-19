@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import CountryInfo from './components/CountryInfo'
 
 function App() {
   const [countries, setCountries] = useState([])
@@ -42,24 +43,14 @@ function App() {
       {selectedCountries.length > 10 &&  <p>Too many matches, specify another filter</p>}
       <ul>
         {displayList && selectedCountries.map((country) => (
-          <li key={country.name.common}>{country.name.common}</li>
+          <li key={country.name.common}>
+            {country.name.common} <button>Show</button>
+          </li>
         ))}
       </ul>
-      {selectedCountries.length === 1 && selectedCountries.map((country) => (
-        <div key={country.name.common}>
-          <h1>{country.name.common}</h1>
-          <p>Capital: {country.capital[0]}</p>
-          <p>Area: {country.area}</p>
-          <h2>Languages</h2>
-          <ul>
-            {Object.values(country.languages).map(language => 
-              <li key={language}>{language}</li>
-            )}
-          </ul>
-          <img src={country.flags["png"]} alt="Flag" />
-        </div>
-        
-      ))}
+      {selectedCountries.length === 1 && 
+        <CountryInfo country={selectedCountries[0]} />        
+      }
     </>
   )
 }
