@@ -4,6 +4,7 @@ import CountryInfo from './components/CountryInfo'
 
 function App() {
   const [countries, setCountries] = useState([])
+  const [shownCountry, setShownCountry] = useState(null)
   const [selectedCountries, setSelectedCountries] = useState([])
 
   // Intial API call on first load
@@ -32,6 +33,10 @@ function App() {
     setSelectedCountries(selected)
   }
 
+
+
+  
+
   // Boolean to see if there are 1-10 countries in selection
   const displayList = (selectedCountries.length <= 10 && selectedCountries.length > 1);
 
@@ -44,10 +49,11 @@ function App() {
       <ul>
         {displayList && selectedCountries.map((country) => (
           <li key={country.name.common}>
-            {country.name.common} <button>Show</button>
+            {country.name.common} <button onClick={() => setShownCountry(country)}>Show</button>
           </li>
         ))}
       </ul>
+      {shownCountry && <CountryInfo country={shownCountry} /> }
       {selectedCountries.length === 1 && 
         <CountryInfo country={selectedCountries[0]} />        
       }
