@@ -6,8 +6,7 @@ function App() {
   const [countries, setCountries] = useState([])
   const [shownCountry, setShownCountry] = useState(null)
   const [selectedCountries, setSelectedCountries] = useState([])
-
-  const weatherUrl =`https://api.openweathermap.org/data/2.5/weather?q=`
+  const [weatherMetrics, setWeatherMetrics] = useState(null)
 
   // Intial API call on first load
   useEffect(() => {
@@ -33,33 +32,39 @@ function App() {
     })
     console.log(selected)
     setSelectedCountries(selected)
+    setShownCountry(null);
   }
 
-  const getWeather = (capital) => {
-    axios
-      .get(`${weatherUrl}${capital}&appid=${import.meta.env.VITE_API_KEY}`)
-      .then(response => {
-        console.log(response.data)
-        return response.data
-      })
-      .then(weather => {
-        console.log('Weather', weather)
-        const tempF = ((weather.main.temp - 273.15) * 9 / 5 + 32 ).toFixed(2)
-        const iconURL = `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`
-        const weatherMetrics = {
-          temp: tempF,
-          icon: iconURL,
-          windSpeed: weather.wind.speed
-        }
-        console.log(weatherMetrics)
-        return weatherMetrics
-      })
-      .catch(error => {
-        console.log("Error fetching data:", error);
-      });
-  }
-
+  useEffect(() => {
+    const weatherUrl =`https://api.openweathermap.org/data/2.5/weather?q=`
+    const countryToFetch = shownCountry || (selectedCountries.length === 1 ? selectedCountries[0] : null);
+    if (countryToFetch) {
+      axios
+        .get(`${weatherUrl}${countryToFetch.capital}&appid=${import.meta.env.VITE_API_KEY}`)
+        .then(response => {
+          return response.data
+        })
+        .then(weather => {
+          const tempF = ((weather.main.temp - 273.15) * 9 / 5 + 32 ).toFixed(2)
+          const iconURL = `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`
+          setWeatherMetrics({
+            temp: tempF,
+            icon: iconURL,
+            windSpeed: weather.wind.speed
+          })
+        })
+        .catch(error => console.log("Error fetching data:", error));
+    } else {
+      setWeatherMetrics(null)
+    }
   
+  }, [shownCountry, selectedCountries])
+  
+  useEffect(() => {
+    if (selectedCountries.length === 1) {
+      setShownCountry(selectedCountries[0]);
+    }
+  }, [selectedCountries])
 
   // Boolean to see if there are 1-10 countries in selection
   const displayList = (selectedCountries.length <= 10 && selectedCountries.length > 1);
@@ -77,10 +82,7 @@ function App() {
           </li>
         ))}
       </ul>
-      {shownCountry && <CountryInfo country={shownCountry} /> }
-      {selectedCountries.length === 1 && 
-        <CountryInfo country={selectedCountries[0]} getWeather={getWeather} />        
-      }
+      {shownCountry && <CountryInfo country={shownCountry} weather={weatherMetrics} /> }
     </>
   )
 }

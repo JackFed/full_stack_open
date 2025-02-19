@@ -1,8 +1,4 @@
-const CountryInfo = ({ country, getWeather }) => {
-
-    const weather = getWeather(country.capital)
-
-
+const CountryInfo = ({ country, weather }) => {
     return (
         <div key={country.name.common}>
           <h1>{country.name.common}</h1>
@@ -15,12 +11,16 @@ const CountryInfo = ({ country, getWeather }) => {
             )}
           </ul>
           <img src={country.flags["png"]} alt="Flag" />
-          <div>
-            <h1>Weather in {country.capital}</h1>
-            <p>Temperature: degrees Fahrenheit</p>
-            <img src="#" alt="" />
-            <p>Wind m/s</p>
-          </div>
+          { weather ? (
+            <div>
+              <h1>Weather in {country.capital}</h1>
+              <p>Temperature: {weather.temp}°F</p>
+              <img src={weather.icon} alt="Weather Icon" />
+              <p>Wind {weather.windSpeed} m/s</p>
+            </div>
+            ) : (
+                <p>Loading weather...</p>
+            )}
         </div>
     )
 }
