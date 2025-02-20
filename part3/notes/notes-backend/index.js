@@ -4,6 +4,7 @@ const cors = require('cors')
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static('dist'))
 
 // Middleware practice
 const requestLogger = (request, response, next) => {
