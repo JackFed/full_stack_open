@@ -1,8 +1,9 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 
 app.use(express.json())
-
+app.use(cors())
 
 // Middleware practice
 const requestLogger = (request, response, next) => {
@@ -60,7 +61,7 @@ app.delete('/api/notes/:id', (request, response) => {
 
 const generateId = () => {
     const maxId = notes.length > 0 
-        ? Math.math(...notes.map(n => Number(n.id))) 
+        ? Math.max(...notes.map(n => Number(n.id))) 
         : 0
     return String(maxId + 1)
 }
@@ -92,7 +93,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
