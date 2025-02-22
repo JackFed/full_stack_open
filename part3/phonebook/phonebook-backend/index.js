@@ -59,7 +59,7 @@ app.get('/api/persons/:id', (request, response) => {
 
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id;
-    persons = persons.filter(person => person.id !== id)
+    persons = persons.filter(person => person.id.toString() !== id)
     
     response.status(204).end()
 })
@@ -90,7 +90,7 @@ app.post('/api/persons', (request, response) => {
         number: body.number,
     }
     persons = persons.concat(person)
-    response.json(persons)
+    response.json(person)
 })
 
 const PORT = 3001

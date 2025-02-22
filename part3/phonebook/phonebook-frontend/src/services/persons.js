@@ -9,12 +9,14 @@ const getAll = () => {
 
 const create = (newPerson) => {
     const request = axios.post(url, newPerson)
-    return request.then(response => response.data)
+    return request.then(response => {        
+        return response.data
+    })
 }
 
 const deletePerson = (id) => {
     const request = axios.delete(`${url}/${id}`)
-    return request.then(response => response.data)
+    return request.then(response => response)
 }
 
 const updateNumber = (id, newPerson) => {
