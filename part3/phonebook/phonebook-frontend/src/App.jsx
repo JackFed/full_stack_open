@@ -36,8 +36,9 @@ const App = () => {
             setPersons(persons.map(p => p.id === changedP.id ? changedP : p))
             updateMessage(`The number of ${newName} was changed`)
           })
-          .catch(() => {
-            updateMessage(`The information of ${newName} has already been removed from the server`)
+          .catch(error => {
+            console.log(error)
+            updateMessage(error)
           })
       }
     } else {
@@ -50,6 +51,10 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
           updateMessage(`${newName} was added`)
+        })
+        .catch(error => {
+          updateMessage(error.response.data.error)
+          console.log(error.response.data.error)
         })
     }
     setNewName('')
@@ -77,12 +82,15 @@ const App = () => {
           setPersons(persons.filter(p => p.id !== person.id))
           updateMessage(`${person.name}' was deleted`)
         })
-    } else {
-      updateMessage(`${person.name}' was not deleted`)
+        .catch(error => {
+          console.log(error.response.data.error)
+          updateMessage(error.response.data.error)
+        })
     }
   }
 
   const updateMessage = (message) => {
+    console.log(`setting message to: ${message}`)
     setMessage(message)
     setTimeout(() => {
       setMessage(null)
