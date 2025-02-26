@@ -96,7 +96,9 @@ app.put('/api/persons/:id', (request, response, next) => {
         .then(updatedNote => {
             response.json(updatedNote)
         })
-        .catch(error => next(error))
+        .catch(error => {
+            next(error)
+        })
 })
 
 app.use(errorHandler)

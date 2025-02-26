@@ -37,8 +37,7 @@ const App = () => {
             updateMessage(`The number of ${newName} was changed`)
           })
           .catch(error => {
-            console.log(error)
-            updateMessage(error)
+            updateMessage(error.response.data.error)
           })
       }
     } else {
@@ -53,8 +52,8 @@ const App = () => {
           updateMessage(`${newName} was added`)
         })
         .catch(error => {
-          updateMessage(error.response.data.error)
           console.log(error.response.data.error)
+          updateMessage(error.response.data.error)
         })
     }
     setNewName('')
@@ -90,7 +89,6 @@ const App = () => {
   }
 
   const updateMessage = (message) => {
-    console.log(`setting message to: ${message}`)
     setMessage(message)
     setTimeout(() => {
       setMessage(null)
