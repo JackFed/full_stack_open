@@ -25,29 +25,6 @@ const errorHandler = (error, request, response, next) => {
     next(error)
 }
 
-let persons = [
-    { 
-      "id": "1",
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": "2",
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": "3",
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": "4",
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-]
-
 app.get('/api/persons', (request, response) => {
     Person.find({}).then(persons=> {
         response.json(persons)
@@ -81,10 +58,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
         .catch(error => next(error))
 })
 
-const generateId = () => {
-    return String(Math.floor(Math.random() * 10000));
-}
-
 app.post('/api/persons', (request, response, next) => {
     const body = request.body
     // Error bad request checking
@@ -93,22 +66,17 @@ app.post('/api/persons', (request, response, next) => {
             error: 'Name and/or number missing'
         })
     }
-    const dupes = persons.filter(person => person.name === body.name)
-    if (dupes.length > 0) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
-
+    
     // Make and add new person
     const person = new Person({
         name: body.name,
         number: body.number,
     })
-    
-    person.save().then(savedPerson => {
-        response.json(savedPerson)    
-    }).catch(error => next(error))
+    person.save()
+        .then(savedPerson => {
+            if (savedPerson) response.json(savedPerson)    
+        })
+        .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
