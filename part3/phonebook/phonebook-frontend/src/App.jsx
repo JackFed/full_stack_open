@@ -79,7 +79,7 @@ const App = () => {
         .deletePerson(person.id)
         .then(() => {
           setPersons(persons.filter(p => p.id !== person.id))
-          updateMessage(`${person.name}' was deleted`)
+          updateMessage(`${person.name} was deleted`)
         })
         .catch(error => {
           console.log(error.response.data.error)

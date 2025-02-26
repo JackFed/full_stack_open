@@ -4,7 +4,6 @@ const morgan = require('morgan')
 const cors = require('cors')
 require('dotenv').config()
 const Person = require('./models/person')
-const note = require("../../notes/notes-backend/models/note")
 
 app.use(express.json())
 app.use(cors())
@@ -93,8 +92,8 @@ app.put('/api/persons/:id', (request, response, next) => {
         request.params.id, 
         { name, number }, 
         { new:true, runValidators: true, context: 'query' })
-        .then(updatedNote => {
-            response.json(updatedNote)
+        .then(updatedPerson => {
+            response.json(updatedPerson)
         })
         .catch(error => {
             next(error)
