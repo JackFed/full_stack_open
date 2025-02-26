@@ -32,10 +32,12 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
-    const totalPersons = persons.length;
-    const time = new Date();
-
-    response.send(`<div><p>Phonebook has info for ${totalPersons} people</p><p>${time}</p></div>`)
+    
+    Person.find({}).then(persons=> {
+        const totalPersons = persons.length
+        const time = new Date();
+        response.send(`<div><p>Phonebook has info for ${totalPersons} people</p><p>${time}</p></div>`)
+    }).catch(error => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
