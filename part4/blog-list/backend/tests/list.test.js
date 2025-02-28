@@ -90,22 +90,16 @@ describe('Favorite blog', () => {
 
   test('list with one blog', () => {
     assert.deepStrictEqual(listHelper.favoriteBlog(listWithOneBlog), {
-      "_id": "67c098e429b49fd267ed0751",
       "title": "Missing Semester MIT",
       "author": "MIT",
-      "url": "https://missing.csail.mit.edu/",
-      "likes": 5,
-      "__v": 0
+      "likes": 5
     })
   })
   test('list with many blogs', () => {
     assert.deepStrictEqual(listHelper.favoriteBlog(manyBlogs), {
-      _id: "5a422b3a1b54a676234d17f9",
       title: "Canonical string reduction",
       author: "Edsger W. Dijkstra",
-      url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
-      likes: 12,
-      __v: 0
+      likes: 12
     })
   })
 })
