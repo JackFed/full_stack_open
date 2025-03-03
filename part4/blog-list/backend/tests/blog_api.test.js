@@ -88,6 +88,19 @@ test.only('Create post with no title', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
+test.only('Create post with no url', async () => {
+  const newNoUrlBlog = {
+    title: "Cool book post",
+    author: "Jack Bookman",
+    likes: 10
+  }
+
+  await api.post('/api/blogs')
+    .send(newNoUrlBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
