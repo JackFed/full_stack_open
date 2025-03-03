@@ -60,7 +60,7 @@ const initialBlogs = [
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  
+
   for (let blog of initialBlogs) {
     let noteObject = new Blog(blog)
     await noteObject.save()
@@ -71,6 +71,15 @@ test.only('Get all blog posts', async () => {
   await api.get('/api/blogs')
     .expect(200)
     .expect('Content-type', /application\/json/)    
+})
+
+test.only('Identifier name is id not _id', async () => {
+  const response = await api.get('/api/blogs').expect(200)
+  const blogPosts = response.body
+
+  blogPosts.forEach(blog => {
+    assert(blog.hasOwnProperty('id'))
+  })
 })
 
 after(async () => {
