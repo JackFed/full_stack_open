@@ -52,6 +52,27 @@ test.only('Create new blog', async () => {
   assert(blogTitles.includes('Cool book post'))
 })
 
+test.only('Create post with no likes', async () => {
+  const newNoLikeBlog = {
+    title: "Cool book post",
+    author: "Jack Bookman",
+    url: "https://github.com/JackFed"
+  }
+
+  const blogsBefore = await helper.blogsInDb()
+
+  await api.post('/api/blogs')
+    .send(newNoLikeBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, blogsBefore.length + 1)
+
+  const newToDb = blogsAtEnd.filter(blog => blog.title === 'Cool book post')
+  assert.strictEqual(newToDb[0].likes, 0)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
