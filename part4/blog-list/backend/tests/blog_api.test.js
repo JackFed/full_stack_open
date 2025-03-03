@@ -40,13 +40,15 @@ test.only('Create new blog', async () => {
     likes: 1
   }
 
+  const blogsBefore = await helper.blogsInDb()
+
   await api.post('/api/blogs')
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
   const blogsAtEnd = await helper.blogsInDb()
-  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+  assert.strictEqual(blogsAtEnd.length, blogsBefore.length + 1)
 
   const blogTitles = blogsAtEnd.map(blog => blog.title)
   assert(blogTitles.includes('Cool book post'))
@@ -71,6 +73,19 @@ test.only('Create post with no likes', async () => {
 
   const newToDb = blogsAtEnd.filter(blog => blog.title === 'Cool book post')
   assert.strictEqual(newToDb[0].likes, 0)
+})
+
+test.only('Create post with no title', async () => {
+  const newNoTitleBlog = {
+    author: "Jack Bookman",
+    url: "https://github.com/JackFed",
+    likes: 100
+  }
+
+  await api.post('/api/blogs')
+    .send(newNoTitleBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
 })
 
 after(async () => {
