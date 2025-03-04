@@ -101,6 +101,20 @@ test.only('Create post with no url', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
+test.only('Delete a blog with given id successfully', async () => {
+  const beforeBlogs = await helper.blogsInDb()
+  const blogToDelete = beforeBlogs[0]
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+  
+  const endBlogs = await helper.blogsInDb()
+  const endIds = endBlogs.map(blog => blog.id)
+
+  assert.strictEqual(beforeBlogs.length - 1, endBlogs.length)
+  assert(!endIds.includes(blogToDelete.id))
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
