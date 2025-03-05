@@ -115,7 +115,7 @@ test('Delete a blog with given id successfully', async () => {
   assert(!endIds.includes(blogToDelete.id))
 })
 
-test.only('Update a blog with a valid id and new like amount', async () => {
+test('Update a blog with a valid id and new like amount', async () => {
   const beforeBlogs = await helper.blogsInDb()
   const blogToUpdate = beforeBlogs[0]
   const updatedBlog = {
