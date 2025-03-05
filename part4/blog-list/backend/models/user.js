@@ -11,10 +11,7 @@ const userSchema = new mongoose.Schema({
     }
   },
   name: String,
-  passwordHash: {
-    type: String,
-    minlength: 3
-  },
+  passwordHash: String,
   notes: [
     {
       type: mongoose.Schema.Types.ObjectId,

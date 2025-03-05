@@ -66,7 +66,7 @@ describe('When there is initally one user in db', () => {
     assert.strictEqual(usersAfter.length, usersBefore.length)
   })
 
-  test.only('Creation fails when username length < 3 ', async () => {
+  test('Creation fails when username length < 3 ', async () => {
     const newUser = {
       name: 'Timmy',
       username: 'ti',
@@ -84,6 +84,26 @@ describe('When there is initally one user in db', () => {
     assert(result.body.error.includes('Username must be at least 3 characters long'))
     assert.strictEqual(usersAfter.length, usersBefore.length)
   })
+
+  test.only('Creation fails when password length < 3 ', async () => {
+    const newUser = {
+      name: 'Doug',
+      username: 'doug123',
+      password: '14'
+    }
+    
+    const usersBefore = await helper.usersInDb()
+
+    const result = await api.post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAfter = await helper.usersInDb()
+    assert(result.body.error.includes('Password must be at least 3 characters long'))
+    assert.strictEqual(usersAfter.length, usersBefore.length)
+  })
+
 })
 
 after(async () => {
