@@ -21,14 +21,14 @@ describe('Blog', () => {
       name: 'Bill',
       username: 'billyo7',
       passwordHash: passwordHash
-    })
-    await user.save()
+    })    
+    const savedUser = await user.save()
 
     const userLogin = await api
       .post('/api/login')
       .send({
-        username: "billyo7",
-        password: "1112"
+        username: 'billyo7',
+        password: '1112'
       })
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -56,7 +56,7 @@ describe('Blog', () => {
   })
 
   describe('Create blog', () => {
-    test.only('Create new blog', async () => {      
+    test.only('unique is created', async () => {      
       const newBlog = {
         title: "Cool book post",
         author: "Jack Bookman",
@@ -80,7 +80,7 @@ describe('Blog', () => {
       assert(blogTitles.includes('Cool book post'))
     })
 
-    test('Create blog with no likes', async () => {
+    test('no likes adds likes: 0', async () => {
       const newNoLikeBlog = {
         title: "Cool book post",
         author: "Jack Bookman",
@@ -90,6 +90,7 @@ describe('Blog', () => {
       const blogsBefore = await helper.blogsInDb()
 
       await api.post('/api/blogs')
+        .set({ Authorization: `Bearer ${token}` })
         .send(newNoLikeBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -101,7 +102,7 @@ describe('Blog', () => {
       assert.strictEqual(newToDb[0].likes, 0)
     })
 
-    test('Create blog with no title', async () => {
+    test.only('no title fails', async () => {
       const newNoTitleBlog = {
         author: "Jack Bookman",
         url: "https://github.com/JackFed",
@@ -109,12 +110,13 @@ describe('Blog', () => {
       }
 
       await api.post('/api/blogs')
+        .set({ Authorization: `Bearer ${token}` })
         .send(newNoTitleBlog)
         .expect(400)
         .expect('Content-Type', /application\/json/)
     })
 
-    test('Create blog with no url', async () => {
+    test.only('no url fails', async () => {
       const newNoUrlBlog = {
         title: "Cool book post",
         author: "Jack Bookman",
@@ -122,8 +124,23 @@ describe('Blog', () => {
       }
 
       await api.post('/api/blogs')
+        .set({ Authorization: `Bearer ${token}` })
         .send(newNoUrlBlog)
         .expect(400)
+        .expect('Content-Type', /application\/json/)
+    })
+
+    test.only('no token gets unauthorized', async () => {
+      const newBlog = {
+        title: "Cool book post",
+        author: "Jack Bookman",
+        url: "https://github.com/JackFed",
+        likes: 1
+      }
+
+      await api.post('/api/blogs')
+        .send(newBlog)
+        .expect(401)
         .expect('Content-Type', /application\/json/)
     })
   })
