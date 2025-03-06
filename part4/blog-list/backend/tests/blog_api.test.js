@@ -15,20 +15,19 @@ describe('Blog', () => {
   beforeEach(async () => {
     await Blog.deleteMany({})
     await User.deleteMany({})
-
-    const passwordHash = await bcrypt.hash('1112', 10)
-    const user = new User({
+    
+    const newUser = {
       name: 'Bill',
       username: 'billyo7',
-      passwordHash: passwordHash
-    })    
-    const savedUser = await user.save()
+      password: '1112'
+    }
+    await helper.createOneUser(newUser)
 
     const userLogin = await api
       .post('/api/login')
       .send({
-        username: 'billyo7',
-        password: '1112'
+        username: newUser.username,
+        password: newUser.password
       })
       .expect(200)
       .expect('Content-Type', /application\/json/)
