@@ -46,7 +46,7 @@ describe('When there is initally one user in db', () => {
     })
   })
 
-  test.only('Creation fails with proper message if username is taken', async () => {
+  test('Creation fails with proper message if username is taken', async () => {
     const newUser = {
       name: 'Bill',
       username: 'billyo7',
@@ -85,7 +85,7 @@ describe('When there is initally one user in db', () => {
     assert.strictEqual(usersAfter.length, usersBefore.length)
   })
 
-  test.only('Creation fails when password length < 3 ', async () => {
+  test('Creation fails when password length < 3 ', async () => {
     const newUser = {
       name: 'Doug',
       username: 'doug123',
