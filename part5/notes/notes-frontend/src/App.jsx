@@ -8,7 +8,7 @@ const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('a new note...')
   const [showAll, setShowAll] = useState(true)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -75,7 +75,7 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
-      {errorMessage !== "" && <Notification message={errorMessage} />}
+      <Notification message={errorMessage} />
       <form onSubmit={handleLogin}>
         <div>
           username
