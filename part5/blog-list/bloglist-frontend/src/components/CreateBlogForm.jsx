@@ -1,20 +1,47 @@
+import { useState } from "react"
+
 const CreateBlogForm = () => {
+  
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  const handleCreate = (event) => {
+    event.preventDefault()
+    console.log({
+      title,
+      author,
+      url
+    })
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
 
   return (
     <div>
       <h2>Create new</h2>
-      <form>
+      <form onSubmit={handleCreate}>
         <p>
           title:
-          <input type="text" />
+          <input 
+            type="text"
+            value={title}
+            onChange={({ target }) => setTitle(target.value)} />
         </p>
         <p>
           author:
-          <input type="text" />
+          <input 
+            type="text"
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)} />
         </p>
         <p>
           url:
-          <input type="text" />
+          <input 
+            type="text"
+            value={url}
+            onChange={({ target }) => setUrl(target.value)} />
         </p>
         <button type='submit'>create</button>
       </form>

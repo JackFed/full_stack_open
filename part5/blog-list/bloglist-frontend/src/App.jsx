@@ -3,6 +3,7 @@ import UserBlog from './components/UserBlogs'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import LoginForm from './components/Login'
+import CreateBlogForm from './components/CreateBlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -52,7 +53,11 @@ const App = () => {
       {errorMessage === null && <p>{errorMessage}</p>}
       { user === null 
         ? <LoginForm username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin}/>
-        : <UserBlog user={user} blogs={blogs} setUser={setUser} />   
+        : <>
+            <CreateBlogForm />
+            <UserBlog user={user} blogs={blogs} setUser={setUser} />
+          </>
+           
       }
       
     </div>
