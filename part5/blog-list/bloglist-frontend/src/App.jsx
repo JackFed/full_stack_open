@@ -52,7 +52,7 @@ const App = () => {
       {errorMessage === null && <p>{errorMessage}</p>}
       { user === null 
         ? <LoginForm username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin}/>
-        : <UserBlog user={user} blogs={blogs} />   
+        : <UserBlog user={user} blogs={blogs} setUser={setUser} />   
       }
       
     </div>
