@@ -1,9 +1,10 @@
 import Blog from './Blog'
 
-const UserBlogs = ({ user, blogs, setUser }) => {
+const UserBlogs = ({ user, blogs, setUser, setMessage }) => {
 
   const logout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
+    setMessage(`${user.username} has logged out`)
     setUser(null)
   }
 

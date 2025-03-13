@@ -14,11 +14,6 @@ const CreateBlogForm = ({ setBlog, createBlog }) => {
       url
     }
     createBlog(newBlog)
-    console.log('blog created', {
-      title,
-      author,
-      url
-    })
     setTitle('')
     setAuthor('')
     setUrl('')

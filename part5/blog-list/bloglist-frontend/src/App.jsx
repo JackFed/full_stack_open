@@ -7,7 +7,7 @@ import CreateBlogForm from './components/CreateBlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const[errorMessage, setErrorMessage] = useState(null)
+  const[statusMessage, setStatusMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -42,11 +42,9 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      setMessage(`Now logged in as: ${user.username}`)
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      setMessage('Wrong username or password')
     }
   }
 
@@ -54,22 +52,27 @@ const App = () => {
     try {
       const newBlog = await blogService.createBlog(blog)
       setBlogs([...blogs, newBlog])
-    } catch (exception) {
-      setErrorMessage('Failed to make new blog')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      setMessage(`Added new blog: ${newBlog.title} by ${newBlog.author}`)
+    } catch (error) {
+      setMessage('Blog needs a title, author, and url')
     }
+  }
+
+  const setMessage = (message) => {
+    setStatusMessage(message)
+    setTimeout(() => {
+      setStatusMessage(null)
+    }, 5000)
   }
 
   return (
     <div>
-      {errorMessage === null && <p>{errorMessage}</p>}
+      {statusMessage !== null && <h3>{statusMessage}</h3>}
       { user === null 
         ? <LoginForm username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin}/>
         : <>
             <CreateBlogForm createBlog={createBlog} />
-            <UserBlog user={user} blogs={blogs} setUser={setUser} />
+            <UserBlog user={user} blogs={blogs} setUser={setUser} setMessage={setMessage} />
           </>
            
       }
