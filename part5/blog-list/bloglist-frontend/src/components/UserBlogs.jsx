@@ -1,4 +1,5 @@
 import Blog from './Blog'
+import CreateBlogForm from './CreateBlogForm'
 
 const UserBlogs = ({ user, blogs, setUser }) => {
 
@@ -9,9 +10,12 @@ const UserBlogs = ({ user, blogs, setUser }) => {
 
   return (
     <>
-      <p>{user.name} is logged in</p>
-      <button onClick={logout}>Log out</button>
-      <h2>blogs</h2>
+      <p>
+        {user.name} is logged in 
+        <button onClick={logout}>Log out</button>
+      </p>
+      <CreateBlogForm />
+      <h2>Blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
