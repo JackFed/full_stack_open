@@ -17,7 +17,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -37,11 +37,25 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
+      blogService.setToken(user.token)
+
       setUser(user)
       setUsername('')
       setPassword('')
     } catch (exception) {
       setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+  const createBlog = async (blog) => {
+    try {
+      const newBlog = await blogService.createBlog(blog)
+      setBlogs([...blogs, newBlog])
+    } catch (exception) {
+      setErrorMessage('Failed to make new blog')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -54,7 +68,7 @@ const App = () => {
       { user === null 
         ? <LoginForm username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin}/>
         : <>
-            <CreateBlogForm />
+            <CreateBlogForm createBlog={createBlog} />
             <UserBlog user={user} blogs={blogs} setUser={setUser} />
           </>
            
