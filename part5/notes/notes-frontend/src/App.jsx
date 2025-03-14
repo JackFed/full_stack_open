@@ -12,8 +12,6 @@ const App = () => {
   const [notes, setNotes] = useState([])
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [loginVisible, setLoginVisible] = useState(false)
 
@@ -25,6 +23,7 @@ const App = () => {
       })
   }, [])
 
+  // Keep user logged in if already in local storage
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
     if (loggedUserJSON) {
@@ -63,20 +62,15 @@ const App = () => {
       })
   }
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async (newLogin) => {
     try {
-      const user = await loginService.login({
-        username, password,
-      })
+      const user = await loginService.login(newLogin)
 
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
       )
       noteService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
     } catch (exception) {
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
@@ -99,13 +93,7 @@ const App = () => {
           <button type='button' onClick={() => setLoginVisible(true)}>log in</button>
         </div>
         <div style={showWhenVisible}>
-          <LoginForm
-            handleSubmit={handleLogin}
-            username={username}
-            password={password}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-          />
+          <LoginForm loginUser={handleLogin} />
           <button type='button' onClick={() => setLoginVisible(false)}>cancel</button>
         </div>
       </div>
