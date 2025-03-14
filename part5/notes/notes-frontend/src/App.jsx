@@ -103,13 +103,37 @@ const App = () => {
     ? notes
     : notes.filter(note => note.important)
 
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
+    console.log('login visible = ', loginVisible)
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button type='button' onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm
+            handleSubmit={handleLogin}
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+          />
+          <button type='button' onClick={() => setLoginVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} />
       
       { user === null ?
-        <LoginForm handleLogin={handleLogin} username={username} password={password} handleUsernameChange={({ target }) => setUsername(target.value)} handlePasswordChange={({ target }) => setPassword(target.value)} /> :
+        loginForm() :
         <div>
           <p>{user.name} logged-in</p>
           <NoteForm addNote={addNote} newNote={newNote} handleNoteChange={handleNoteChange} />

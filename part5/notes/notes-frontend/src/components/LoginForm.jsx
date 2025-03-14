@@ -1,6 +1,7 @@
-const LoginForm = ({ handleLogin, username, password, handleUsernameChange, handlePasswordChange }) => {
+const LoginForm = ({ handleSubmit, username, password, handleUsernameChange, handlePasswordChange }) => {
+
   return (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleSubmit}>
       <div>
         username
           <input
