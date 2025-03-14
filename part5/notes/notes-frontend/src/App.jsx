@@ -83,30 +83,15 @@ const App = () => {
     ? notes
     : notes.filter(note => note.important)
 
-  const loginForm = () => {
-    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
-    const showWhenVisible = { display: loginVisible ? '' : 'none' }
-
-    return (
-      <div>
-        <div style={hideWhenVisible}>
-          <button type='button' onClick={() => setLoginVisible(true)}>log in</button>
-        </div>
-        <div style={showWhenVisible}>
-          <LoginForm loginUser={handleLogin} />
-          <button type='button' onClick={() => setLoginVisible(false)}>cancel</button>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} />
       
       { user === null ?
-        loginForm() :
+        <Togglable buttonLabel='login'>
+          <LoginForm loginUser={handleLogin} />
+        </Togglable> :
         <div>
           <p>{user.name} logged-in</p>
           <Togglable buttonLabel='new note'>
