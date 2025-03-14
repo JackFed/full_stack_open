@@ -15,6 +15,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
     noteService
@@ -108,7 +109,7 @@ const App = () => {
       <Notification message={errorMessage} />
       
       { user === null ?
-        <LoginForm handleLogin={handleLogin} username={username} password={password} setUsername={setUsername} setPassword={setPassword} /> :
+        <LoginForm handleLogin={handleLogin} username={username} password={password} handleUsernameChange={({ target }) => setUsername(target.value)} handlePasswordChange={({ target }) => setPassword(target.value)} /> :
         <div>
           <p>{user.name} logged-in</p>
           <NoteForm addNote={addNote} newNote={newNote} handleNoteChange={handleNoteChange} />
