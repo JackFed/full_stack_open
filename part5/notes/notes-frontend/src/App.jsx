@@ -6,6 +6,7 @@ import NoteForm from './components/NoteForm'
 import LoginForm from './components/LoginForm'
 import noteService from './services/notes'
 import loginService from './services/login'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -106,7 +107,6 @@ const App = () => {
   const loginForm = () => {
     const hideWhenVisible = { display: loginVisible ? 'none' : '' }
     const showWhenVisible = { display: loginVisible ? '' : 'none' }
-    console.log('login visible = ', loginVisible)
 
     return (
       <div>
@@ -136,7 +136,9 @@ const App = () => {
         loginForm() :
         <div>
           <p>{user.name} logged-in</p>
-          <NoteForm addNote={addNote} newNote={newNote} handleNoteChange={handleNoteChange} />
+          <Togglable buttonLabel='new note'>
+            <NoteForm onSubmit={addNote} value={newNote} handleChange={handleNoteChange} />
+          </Togglable>
         </div>
       }
       
