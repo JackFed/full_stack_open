@@ -68,19 +68,18 @@ const App = () => {
       const newBlog = await blogService.updateLikes(id, blog)
       setBlogs(blogs.map(blog => blog.id === id ? newBlog : blog))
     } catch (error) {
-      setMessage(error.message)
+      setMessage('Failed to like blog')
     }
   }
 
   const handleDelete = async (id) => {
-    console.log('deleting blog: ', id)
     try {
-      const response = await blogService.deleteBlog(id)
-      
+      await blogService.deleteBlog(id)
       setBlogs(blogs.filter(blog => blog.id !== id))
       setMessage(`Blog deleted`)
     } catch (error) {
-      setMessage(error.message)
+      const errorMessage = error.response?.data?.error || 'An unexpected error occurred. Please try again.';
+      setMessage(errorMessage)
     }
   }
 

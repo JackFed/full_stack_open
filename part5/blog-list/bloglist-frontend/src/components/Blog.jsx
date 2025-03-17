@@ -25,7 +25,9 @@ const Blog = ({ blog, handleLike, handleDelete }) => {
 
   const removeBlog = () => {
     console.log('removing blog...')
-    handleDelete(blog.id)
+    if (window.confirm(`Delete ${blog.title}?`)) {
+      handleDelete(blog.id)
+    }
   }
 
   return ( 
