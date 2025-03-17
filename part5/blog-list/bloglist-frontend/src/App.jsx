@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import UserBlog from './components/UserBlogs'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -12,6 +12,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const blogFormRef = useRef()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -51,6 +52,7 @@ const App = () => {
 
   const createBlog = async (blog) => {
     try {
+      blogFormRef.current.toggleVisibility()
       const newBlog = await blogService.createBlog(blog)
       setBlogs([...blogs, newBlog])
       setMessage(`Added new blog: ${newBlog.title} by ${newBlog.author}`)
@@ -72,7 +74,7 @@ const App = () => {
       { user === null 
         ? <LoginForm username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin}/>
         : <>
-            <Togglable buttonLabel='create'>
+            <Togglable buttonLabel='create' ref={blogFormRef}>
               <CreateBlogForm createBlog={createBlog} />
             </Togglable>
             <UserBlog user={user} blogs={blogs} setUser={setUser} setMessage={setMessage} />
