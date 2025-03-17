@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import Blog from './components/Blog'
 import UserBlog from './components/UserBlogs'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -8,7 +9,7 @@ import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const[statusMessage, setStatusMessage] = useState(null)
+  const [statusMessage, setStatusMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -61,6 +62,17 @@ const App = () => {
     }
   }
 
+  const updateLikes = async (blog) => {
+    try {
+      const newBlog = await blogService.updateLikes(blog)
+      console.log('new blog', newBlog)
+      setBlogs([...blogs, newBlog])
+      setMessage(`Liked ${newBlog.title}`)
+    } catch (error) {
+      setMessage(error.message)
+    }
+  }
+
   const setMessage = (message) => {
     setStatusMessage(message)
     setTimeout(() => {
@@ -73,13 +85,16 @@ const App = () => {
       {statusMessage !== null && <h3>{statusMessage}</h3>}
       { user === null 
         ? <LoginForm username={username} password={password} setUsername={setUsername} setPassword={setPassword} handleLogin={handleLogin}/>
-        : <>
+        : <div>
+            <UserBlog user={user} setUser={setUser} setMessage={setMessage} />
             <Togglable buttonLabel='create' ref={blogFormRef}>
               <CreateBlogForm createBlog={createBlog} />
             </Togglable>
-            <UserBlog user={user} blogs={blogs} setUser={setUser} setMessage={setMessage} />
-          </>
-           
+            <h2>Blogs</h2>
+            {blogs.map(blog =>
+              <Blog key={blog.id} blog={blog} handleLike={updateLikes} />
+            )}
+          </div>           
       }
       
     </div>
