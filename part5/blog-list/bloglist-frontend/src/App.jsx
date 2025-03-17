@@ -62,12 +62,10 @@ const App = () => {
     }
   }
 
-  const updateLikes = async (blog) => {
+  const handleLike = async (id, blog) => {
     try {
-      const newBlog = await blogService.updateLikes(blog)
-      console.log('new blog', newBlog)
-      setBlogs([...blogs, newBlog])
-      setMessage(`Liked ${newBlog.title}`)
+      const newBlog = await blogService.updateLikes(id, blog)
+      setBlogs(blogs.map(blog => blog.id === id ? newBlog : blog))
     } catch (error) {
       setMessage(error.message)
     }
@@ -92,7 +90,7 @@ const App = () => {
             </Togglable>
             <h2>Blogs</h2>
             {blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} handleLike={updateLikes} />
+              <Blog key={blog.id} blog={blog} handleLike={handleLike} />
             )}
           </div>           
       }

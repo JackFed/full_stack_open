@@ -14,8 +14,13 @@ const Blog = ({ blog, handleLike }) => {
   const toggleShown = () => setShown(!shown)
 
   const likeBlog = () => {
-    handleLike(blog)
-    console.log('liked blog')
+    handleLike(blog.id, {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+      user: blog.user.id
+     })
   }
 
   return ( 
