@@ -28,7 +28,7 @@ const App = () => {
     blogService.getAll().then(blogs => {
       blogs.sort((a, b) => b.likes - a.likes)
       setBlogs( blogs )
-    })  
+    })
   }, [])
 
   const handleLogin = async (event) => {
@@ -72,6 +72,18 @@ const App = () => {
     }
   }
 
+  const handleDelete = async (id) => {
+    console.log('deleting blog: ', id)
+    try {
+      const response = await blogService.deleteBlog(id)
+      
+      setBlogs(blogs.filter(blog => blog.id !== id))
+      setMessage(`Blog deleted`)
+    } catch (error) {
+      setMessage(error.message)
+    }
+  }
+
   const setMessage = (message) => {
     setStatusMessage(message)
     setTimeout(() => {
@@ -91,7 +103,7 @@ const App = () => {
             </Togglable>
             <h2>Blogs</h2>
             {blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+              <Blog key={blog.id} blog={blog} handleLike={handleLike} handleDelete={handleDelete} />
             )}
           </div>           
       }
