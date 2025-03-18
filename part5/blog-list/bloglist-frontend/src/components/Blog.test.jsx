@@ -7,22 +7,22 @@ describe('Blog tests', () => {
 
   beforeEach(() => {
     blog = {
-      "title": "Test blog name",
-      "author": "Guy",
-      "url": "https://missing.csail.mit.edu/",
-      "likes": 0,
-      "id": "67d721eb3a374811a8bff310",
-      "user": {
-        "username": "billyo7",
-        "name": "Bill",
-        "id": "67c88e7f4d3c7a0e5ace32cb"
-        },
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+      likes: 0,
+      id: "67d721eb3a374811a8bff310",
+      user: {
+        username: "billyo7",
+        name: "Bill",
+        id: "67c88e7f4d3c7a0e5ace32cb"
+      },
     }
   })
   test('Displays title and author only on render', () => {
     render(<Blog blog={blog} />)
 
-    const element = screen.getByText('Test blog name Guy')
+    const element = screen.getByText(`${blog.title} ${blog.author}`)
 
     expect(element).toBeDefined()
   })
@@ -35,8 +35,8 @@ describe('Blog tests', () => {
     await user.click(button)
 
 
-    const likes = screen.getByText('likes: 0')
-    const url = screen.getByText('https://missing.csail.mit.edu/')
+    const likes = screen.getByText(`likes: ${blog.likes}`)
+    const url = screen.getByText(blog.url)
 
     expect(url).toBeDefined()
     expect(likes).toBeDefined()
@@ -50,7 +50,7 @@ describe('Blog tests', () => {
 
     const viewButton = screen.getByText('view')
     await user.click(viewButton)
-    
+
     const likeButton = screen.getByText('like')
     await user.click(likeButton)
     await user.click(likeButton)
