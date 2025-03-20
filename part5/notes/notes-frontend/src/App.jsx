@@ -96,11 +96,11 @@ const App = () => {
       <Notification message={errorMessage} />
       
       { user === null ?
-        <Togglable buttonLabel='login'>
+        <Togglable buttonLabel='log in'>
           <LoginForm loginUser={handleLogin} />
         </Togglable> :
         <div>
-          <p>{user.name} logged-in</p>
+          <p>{user.name} logged in</p>
           {noteForm()}
         </div>
       }
